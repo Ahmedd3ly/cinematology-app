@@ -42,6 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * One to many relationship with Review class.
+     *
+     * i.e A user can have many reviews.
+     */
     public function reviews()
     {
         return $this->hasMany(Review::class);

@@ -20,11 +20,11 @@ class MovieFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(2),
-            'description' => $this->faker->paragraph(3),
-            'director' => $this->faker->name(),
-            'release_date' => $this->faker->date(),
-            'genre' => $this->faker->randomElement(
+            'title' => fake()->sentence(2),
+            'description' =>fake()->paragraph(3),
+            'director' => fake()->name(),
+            'release_date' => fake()->date(),
+            'genre' => fake()->randomElement(
                 [
                 'Action',
                 'Comedy',
@@ -35,8 +35,8 @@ class MovieFactory extends Factory
                 'Romance', 
                 'Thriller'
                 ]),
-            'poster' => $this->faker->imageUrl(),
-            'rating' => $this->faker->numberBetween(1, 5),
+            'poster' => fake()->imageUrl(),
+            'rating' => fake()->numberBetween(1, 5),
 
         ];
     }

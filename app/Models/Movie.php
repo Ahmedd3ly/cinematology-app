@@ -18,7 +18,11 @@ class Movie extends Model
         'poster',
         'rating',
     ];
-
+    /**
+     * One to many relationship with Review class.
+    *
+     * i.e A movie can have many reviews.
+     */
     public function reviews()
     {
         return $this->hasMany(Review::class);

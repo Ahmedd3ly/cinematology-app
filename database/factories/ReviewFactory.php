@@ -21,9 +21,13 @@ class ReviewFactory extends Factory
 
     public function definition(): array
     {
+        $users = User::all();
+        $movies = Movie::all();
         return [
-            'rating' => $this->faker->numberBetween(1, 5),
-            'review' => $this->faker->paragraph(3),
+            'user_id'  => fake()->numberBetween(1, $users->count()),
+            'movie_id' => fake()->numberBetween(1, $movies->count()),
+            'rating'   => fake()->numberBetween(1, 5),
+            'review'   => fake()->paragraph(3),
         ];
     }
 }
