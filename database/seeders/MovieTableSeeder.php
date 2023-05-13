@@ -13,6 +13,6 @@ class MovieTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Movie::factory()->count(10)->create();
+        Movie::factory()->count(20)->create();
     }
 }
