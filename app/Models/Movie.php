@@ -19,6 +19,16 @@ class Movie extends Model
         'rating',
     ];
     /**
+     * Many to many relationship with Cast class.
+    *
+     * i.e A movie can have many casts.
+     */
+    public function casts()
+    {
+        return $this->belongsToMany(Cast::class) -> withPivot('role');
+    }
+
+    /**
      * One to many relationship with Review class.
     *
      * i.e A movie can have many reviews.
@@ -27,4 +37,6 @@ class Movie extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    
 }

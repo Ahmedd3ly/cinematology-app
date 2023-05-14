@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\CastController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,19 +18,30 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/movies');
 });
 
 Route::get('/movies', [MovieController::class, 'index']);
-Route::get('/movies/{id}', [MovieController::class, 'show']);
+Route::get('/movies/create', [MovieController::class, 'create']) -> name('movies.create');
+Route::post('/movies', [MovieController::class, 'store'])-> name('movies.store');
+Route::get('/movies/{movie}', [MovieController::class, 'show'])-> name('movies.show');
+Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])-> name('movies.destroy');
 
-Route::get('/home', function () {
-    return view('home');
-});
+Route::get('/cast', [CastController::class, 'index']);
+Route::post('/cast', [CastController::class, 'store'])-> name('cast.store');
+Route::get('/cast/{cast}', [CastController::class, 'show'])-> name('cast.show');
 
-Route::get('/movies/{movie}', function ($movie) {
-    return view('movieDetails', ['movieTitle' => $movie] );
-});
+
+Route::post('/movies/{movie}/reviews', [ReviewController::class, 'store'])-> name('reviews.store');
+Route::delete('/movies/{movie}/reviews', [ReviewController::class, 'destroy'])-> name('reviews.destroy');
+
+/*
+Route::post('/movies/{movie:id}/cast_store') -> name('movieCastStore');
+Route::delete('/movies/{movie:id}/casts/{cast:id}') -> name('movie_cast_destroy');
+Route::resource('movies', MovieController::class);
+Route::resource('casts', CastController::class);
+Route::resource('movies.reviews', ReviewController::class);
+*/
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class MovieController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $movies = Movie::all();
-        return view('movies.index', ['movies' => $movies]);
+        //
     }
 
     /**
@@ -22,27 +22,21 @@ class MovieController extends Controller
      */
     public function create()
     {
-        return view('movies.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Movie $movie)
     {
-        $request->validate([
-            'title' => 'required',
-            'poster'=> 'required',
-            'rating'=> 'required',
-            'director' => 'required',
-            'genre' => 'required',
-            'release_date'=> 'required',
-            'description' => 'required',
+        $request->validate(['review' => 'required']);
+        Review::create([
+            'user_id' => Auth::user()->id,
+            'movie_id' => $movie->id,
+            'review' => $request->review,
         ]);
-
-        $movie = Movie::create($request -> all());
-
-        return redirect()->route('movies.show', $movie->id);
+        return back();
     }
 
     /**
@@ -50,10 +44,7 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-
-        $movie = Movie::findOrFail($id);
-        return view('movies.show', ['movie' => $movie]);
-
+        //
     }
 
     /**
@@ -77,11 +68,11 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        $movie = Movie::findOrFail($id);
-        if($id !== Auth::user()->id){
+        $review = Review::findOrFail($id);
+        if($id !== Auth::user()->id){        
             abort(403);
         }
-        $movie->delete();
-        return redirect()->route('movies.index');
+        $review->delete();
+        return back();  
     }
 }

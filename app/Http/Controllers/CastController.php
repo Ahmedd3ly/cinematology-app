@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cast;
 use App\Models\Movie;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class MovieController extends Controller
+class CastController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $movies = Movie::all();
-        return view('movies.index', ['movies' => $movies]);
+        $cast = Cast::all();
+        return view('cast.index', ['movie_cast' => $cast]);
     }
 
     /**
@@ -22,7 +22,7 @@ class MovieController extends Controller
      */
     public function create()
     {
-        return view('movies.create');
+        //
     }
 
     /**
@@ -31,18 +31,16 @@ class MovieController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'poster'=> 'required',
-            'rating'=> 'required',
-            'director' => 'required',
-            'genre' => 'required',
-            'release_date'=> 'required',
-            'description' => 'required',
+            'cast_name'  => 'required',
+            'cast_image' => 'required'
         ]);
 
-        $movie = Movie::create($request -> all());
+      Cast::create([
+            'name'  => $request -> cast_name,
+            'image' => $request -> cast_image
+      ]);
 
-        return redirect()->route('movies.show', $movie->id);
+      return back();
     }
 
     /**
@@ -50,10 +48,8 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-
-        $movie = Movie::findOrFail($id);
-        return view('movies.show', ['movie' => $movie]);
-
+        $cast = Cast::findOrFail($id);
+        return view('cast.show', ['movie_cast' => $cast]);
     }
 
     /**
@@ -77,11 +73,6 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        $movie = Movie::findOrFail($id);
-        if($id !== Auth::user()->id){
-            abort(403);
-        }
-        $movie->delete();
-        return redirect()->route('movies.index');
+        //
     }
 }

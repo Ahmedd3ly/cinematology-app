@@ -12,8 +12,7 @@ class Review extends Model
     protected $fillable = [
         'user_id',
         'movie_id',
-        'rating',
-        'review',
+        'review'
     ];
      /**
      * One to many relationship with User class.

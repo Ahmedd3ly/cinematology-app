@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Movie;
+use App\Models\Cast;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -32,7 +33,8 @@ class MovieFactory extends Factory
                 'Fantasy', 
                 'Horror', 
                 'Mystery', 
-                'Romance', 
+                'Romance',
+                'Science Fiction', 
                 'Thriller'
                 ]),
             'poster' => fake()->imageUrl(),
