@@ -30,17 +30,19 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'poster'=> 'required',
-            'rating'=> 'required',
-            'director' => 'required',
+        $validatedData = $request->validate([
+            'title' => 'required|max:100',
+            'poster' => 'required|',
+            'rating' => 'required|integer',
+            'director' => 'required|max:100',
             'genre' => 'required',
-            'release_date'=> 'required',
-            'description' => 'required',
+            'release_date' => 'required|date',
+            'description' => 'required|max:1000'
         ]);
 
-        $movie = Movie::create($request -> all());
+        $movie = Movie::create($request->all());
+
+        session()->flash('message', "Movie was created.");
 
         return redirect()->route('movies.show', $movie->id);
     }
@@ -53,7 +55,6 @@ class MovieController extends Controller
 
         $movie = Movie::findOrFail($id);
         return view('movies.show', ['movie' => $movie]);
-
     }
 
     /**
@@ -78,7 +79,7 @@ class MovieController extends Controller
     public function destroy(string $id)
     {
         $movie = Movie::findOrFail($id);
-        if($id !== Auth::user()->id){
+        if ($id !== Auth::user()->id) {
             abort(403);
         }
         $movie->delete();

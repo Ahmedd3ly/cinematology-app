@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Movie;
 use App\Models\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewReviewAdded;
 
 class ReviewController extends Controller
 {
@@ -30,12 +33,22 @@ class ReviewController extends Controller
      */
     public function store(Request $request, Movie $movie)
     {
-        $request->validate(['review' => 'required']);
-        Review::create([
+        $request->validate(['review' => 'required|max:1000']);
+        $review = Review::create([
             'user_id' => Auth::user()->id,
             'movie_id' => $movie->id,
             'review' => $request->review,
         ]);
+
+        $users = User::all();
+        $movieTitle = $movie->title;
+        $reviewerEmail = Auth::user()->email;
+
+        // Send email notification to all users
+        foreach ($users as $user) {
+        Mail::to($user->email)->send(new NewReviewAdded($movieTitle, $reviewerEmail));
+    }
+
         return back();
     }
 

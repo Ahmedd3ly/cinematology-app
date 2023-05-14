@@ -59,7 +59,8 @@
         </ul>
         <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
             @csrf
-            <input type="text" name="review" class="form-control" placeholder="Tell us what do you think...">
+            <input type="text" name="review" class="form-control" placeholder="Tell us what do you think..."
+            value="{{ old('review') }}">
             <button type="submit" class="btn btn-primary mt-2 float-end"> Submit Review </button>
         </form>
     </div>
