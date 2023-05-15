@@ -33,14 +33,14 @@ class ReviewController extends Controller
      */
     public function store(Request $request, Movie $movie)
     {
-        $request->validate(['review' => 'required|max:1000']);
+        $request->validate(['review' => 'required|string|max:1000']);
         $review = Review::create([
             'user_id' => Auth::user()->id,
             'movie_id' => $movie->id,
             'review' => $request->review,
         ]);
 
-        $users = User::all();
+        $users = User::take(3)->get();
         $movieTitle = $movie->title;
         $reviewerEmail = Auth::user()->email;
 
@@ -49,7 +49,8 @@ class ReviewController extends Controller
         Mail::to($user->email)->send(new NewReviewAdded($movieTitle, $reviewerEmail));
     }
 
-        return back();
+    return redirect()->route('movies.show', ['id' => $movie->id])->with('message', 'The review has been added successfully.');
+    
     }
 
     /**
@@ -71,9 +72,16 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Review $review)
     {
-        //
+        $request->validate([
+            'review' => 'required|string|max:255'
+        ]);
+    
+        $review->review = $request->input('review');
+        $review->save();
+    
+        return redirect()->back()->with('success', 'Review updated successfully.');
     }
 
     /**

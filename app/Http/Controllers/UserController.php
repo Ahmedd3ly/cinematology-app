@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cast;
-use App\Models\Movie;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class CastController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cast = Cast::all();
-        return view('cast.index', ['movie_cast' => $cast]);
+        //
     }
 
     /**
@@ -30,18 +28,7 @@ class CastController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'cast_name'  => 'required|string|max:100',
-            'cast_image' => 'required'
-        ]);
-
-        $cast = Cast::create([
-            'name'  => $request->cast_name,
-            'image' => $request->cast_image
-        ]);
-
-        return redirect()->route('cast.show', ['cast' => $cast->id])->with('message', 'The cast has been added successfully.');
-
+        //
     }
 
     /**
@@ -49,8 +36,9 @@ class CastController extends Controller
      */
     public function show(string $id)
     {
-        $cast = Cast::findOrFail($id);
-        return view('cast.show', ['movie_cast' => $cast]);
+        $user = User::findOrFail($id);
+        $reviews = $user->reviews;
+        return view('movies.show', ['user' => $user, 'reviews' => $reviews]);
     }
 
     /**

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('cast_movie', function (Blueprint $table) {
             $table->primary(['cast_id', 'movie_id']);
-            $table->string('role');
             $table->timestamps();
 
             $table->bigInteger('cast_id')->unsigned();

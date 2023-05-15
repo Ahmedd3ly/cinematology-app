@@ -26,7 +26,6 @@ class ReviewFactory extends Factory
         return [
             'user_id'  => fake()->numberBetween(1, $users->count()),
             'movie_id' => fake()->numberBetween(1, $movies->count()),
-            'rating'   => fake()->numberBetween(1, 5),
             'review'   => fake()->paragraph(3),
         ];
     }

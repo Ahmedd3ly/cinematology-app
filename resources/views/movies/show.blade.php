@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card my-5">
-    <img src='{{ $movie->poster }}' class="card-image-top">
+    <img src='{{ $movie->poster }}' class="card-image-top figure-img img-fluid rounded">
     <div class="card-body">
         <h1>{{ $movie->title }}</h1>
         <div class="text-danger">
@@ -25,8 +25,8 @@
             @if (count($movie->casts))
             @foreach($movie->casts as $cast)
             <li class="list-group-item">
-                <a href= " {{ route(cast.show, $cast->id) }} "  >{{ $cast -> name }} - </a>
-                <span class="text-muted font-italic "> {{ $cast->pivot->role }} </span>
+                <a href="{{ route('cast.show', $cast->id) }}">{{ $cast->name }} - </a>
+                <span class="text-muted font-italic">{{ $cast->pivot->role }}</span>
                 @auth
                 <form action="#" method="POST">
                     <button type="submit" class="btn btn-link text-danger">Delete</button>
@@ -35,7 +35,7 @@
             </li>
             @endforeach
             @else
-            <p> The movie casts have not been defined!</p>
+            <p>The movie casts have not been defined!</p>
             @endif
         </ul>
 
@@ -43,30 +43,33 @@
         <ul class="list-group list-group-flush">
             @if (count($movie->reviews))
             @foreach($movie->reviews as $review)
-            <li class="list-group-item"><b> {{ $review->user->name }}</b> {{ $review->review }}
+            <li class="list-group-item">
+                <b><a href="{{ route('reviews.update', $review->review) }}">{{ $review->user->name }}</a></b> {{ $review->review }}
                 @auth
-                <form action="#" method="POST">
+                @if(auth()->user()->id == $review->user_id)
+                <form action="{{ route('reviews.update', $review->review) }}" method="POST">
                     @csrf
-                    @method('delete')
-                    <button type="submit" class="btn btn-link text-danger">Delete</button>
+                    @method('PUT')
+                    <button type="submit" class="btn btn-link text-danger">Edit Review</button>
                 </form>
+                @endif
                 @endauth
             </li>
             @endforeach
             @else
-            <p> This movie does not havea any reviews yet! Be the first.</p>
+            <p> This movie does not have any reviews yet! Be the first.</p>
             @endif
         </ul>
+
         <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
             @csrf
-            <input type="text" name="review" class="form-control" placeholder="Tell us what do you think..."
-            value="{{ old('review') }}">
+            <input type="text" name="review" class="form-control" placeholder="Tell us what do you think..." value="{{ old('review') }}">
             <button type="submit" class="btn btn-primary mt-2 float-end"> Submit Review </button>
         </form>
     </div>
     @auth
-    <div class="card-footer" method="POST">
-        <form action=" {{ route('movies.destroy', $movie->id) }} ">
+    <div class="card-footer">
+        <form action="{{ route('movies.destroy', $movie->id) }}" method="POST">
             @csrf
             @method('delete')
             <button type="submit" class="btn btn-link float-end"> Delete </button>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\CastController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,14 +28,17 @@ Route::get('/movies', [MovieController::class, 'index']) -> name('movies.index')
 Route::get('/movies/create', [MovieController::class, 'create']) -> name('movies.create');
 Route::post('/movies', [MovieController::class, 'store'])-> name('movies.store');
 Route::get('/movies/{id}', [MovieController::class, 'show'])-> name('movies.show');
-Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])-> name('movies.destroy');
+Route::delete('/movies/{id}', [MovieController::class, 'destroy'])-> name('movies.destroy');
 
 Route::get('/cast', [CastController::class, 'index']);
 Route::post('/cast', [CastController::class, 'store'])-> name('cast.store');
 Route::get('/cast/{cast}', [CastController::class, 'show'])-> name('cast.show');
 
+Route::get('/users/{user}/reviews', [UserController::class, 'show'])->name('users.show');
+
 
 Route::post('/movies/{movie}/reviews', [ReviewController::class, 'store'])-> name('reviews.store');
+Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
 Route::delete('/movies/{movie}/reviews', [ReviewController::class, 'destroy'])-> name('reviews.destroy');
 
 /*

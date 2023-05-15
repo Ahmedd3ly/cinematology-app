@@ -11,7 +11,7 @@
     @foreach ($movies as $movie)
     <div class="col-md-4">
         <div class="card h-100">
-            <img src='{{ $movie->poster }}' class="card-image-top">
+            <img src='{{ $movie->poster }}' class="card-image-top figure-img img-fluid rounded">
             <div class="card-body">
                 <h3> <a href="{{ route('movies.show', $movie->id) }}"> {{ $movie->title }} </a></h3>
                 <div class="text-danger">
@@ -32,4 +32,5 @@
     </p>
     @endif
 </div>
+{{ $movies->links() }}
 @endsection

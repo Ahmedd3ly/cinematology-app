@@ -13,7 +13,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $movies = Movie::all();
+        $movies = Movie::paginate(10);
         return view('movies.index', ['movies' => $movies]);
     }
 
@@ -22,7 +22,8 @@ class MovieController extends Controller
      */
     public function create()
     {
-        return view('movies.create');
+        $movies = Movie::all();
+        return view('movies.create', ['movies' => $movies]);
     }
 
     /**
@@ -30,11 +31,11 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:100',
-            'poster' => 'required|',
+        $request->validate([
+            'title' => 'required|string|max:100',
+            'poster' => 'required|string',
             'rating' => 'required|integer',
-            'director' => 'required|max:100',
+            'director' => 'required|string|max:100',
             'genre' => 'required',
             'release_date' => 'required|date',
             'description' => 'required|max:1000'
@@ -42,9 +43,7 @@ class MovieController extends Controller
 
         $movie = Movie::create($request->all());
 
-        session()->flash('message', "Movie was created.");
-
-        return redirect()->route('movies.show', $movie->id);
+        return redirect()->route('movies.show', ['id' => $movie->id])->with('message', 'The movie is created successfully.');
     }
 
     /**
@@ -79,10 +78,8 @@ class MovieController extends Controller
     public function destroy(string $id)
     {
         $movie = Movie::findOrFail($id);
-        if ($id !== Auth::user()->id) {
-            abort(403);
-        }
         $movie->delete();
-        return redirect()->route('movies.index');
+
+        return redirect()->route('movies.index')->with('message', 'The movie was deleted.');
     }
 }
